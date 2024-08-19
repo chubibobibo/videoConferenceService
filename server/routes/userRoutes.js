@@ -1,19 +1,25 @@
 import express from "express";
 const router = express.Router();
 
-import { register, login } from "../controllers/userController.js";
+import { register, login, logout } from "../controllers/userController.js";
+
+/** rate limiter for API requests */
+import { limiter } from "../middleware/rateLimiter.js";
 
 /**validations */
-import { registerUser } from "../middleware/inputValidation.js";
+import {
+  registerUserValidation,
+  loginUserValidation,
+} from "../middleware/inputValidation.js";
 import passport from "passport";
 
-router.post("/register", registerUser, register);
+router.post("/register", registerUserValidation, register);
 
 /** Login route */
 /**@err Any error encountered during authentication. */
 /** @user The authenticated user object, if authentication is successful. */
 /** @info Additional information, typically used for error messages if authentication fails. */
-router.post("/login", (req, res, next) => {
+router.post("/login", limiter, loginUserValidation, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err); /** passes the error to the next middleware */
@@ -34,5 +40,8 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
+/** logout route */
+router.post("/logout", logout);
 
 export default router;
