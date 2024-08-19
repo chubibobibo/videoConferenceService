@@ -34,6 +34,7 @@ const UserSchema = new Schema({
   },
 });
 
+/** @errorMEssages custom messages for auth failure of passportJS */
 UserSchema.plugin(passportLocalMongoose);
 
 export const UserModel = new mongoose.model("UserModel", UserSchema);
