@@ -41,3 +41,15 @@ export const login = async (req, res) => {
   }
   res.status(200).json({ message: "User found", loggedUser });
 };
+
+/** Logout user */
+/**@logout provided by passportJs for logging out */
+/**@err if error returns the err to the next middleware */
+export const logout = (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({ message: "User logged out" });
+  });
+};

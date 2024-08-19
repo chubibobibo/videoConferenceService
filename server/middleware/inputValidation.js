@@ -20,7 +20,7 @@ const withValidationErrors = (validateValues) => {
 };
 
 /** register input validation */
-export const registerUser = withValidationErrors([
+export const registerUserValidation = withValidationErrors([
   body("username")
     .notEmpty()
     .withMessage("username cannot be empty")
@@ -53,6 +53,22 @@ export const registerUser = withValidationErrors([
         throw new ExpressError("Email already in use");
       }
     }),
+  body("password")
+    .notEmpty()
+    .withMessage("password cannot be empty")
+    .isLength({ min: 8 })
+    .withMessage("Password should be at least 8 characters"),
+]);
+
+/** login input validation */
+export const loginUserValidation = withValidationErrors([
+  body("username")
+    .notEmpty()
+    .withMessage("username cannot be empty")
+    .isLength({ min: 3, max: 10 })
+    .withMessage(
+      "Username should be at least 3 characters and not more than 10 characters "
+    ),
   body("password")
     .notEmpty()
     .withMessage("password cannot be empty")
