@@ -10,7 +10,9 @@ import {
   Button,
 } from "@material-tailwind/react";
 
-function CardComponent({ title, btnLabel }) {
+import { Form } from "react-router-dom";
+
+function CardComponent({ title, btnLabel, linkLabel, btnType }) {
   return (
     <>
       <Card className='w-96'>
@@ -23,17 +25,19 @@ function CardComponent({ title, btnLabel }) {
             {title}
           </Typography>
         </CardHeader>
-        <CardBody className='flex flex-col gap-4'>
-          <Input label='Email' size='lg' />
-          <Input label='Password' size='lg' />
-          <div className='-ml-2.5'>
-            <Checkbox label='Remember Me' />
-          </div>
-        </CardBody>
+        <Form method='post'>
+          <CardBody className='flex flex-col gap-4'>
+            <Input label='Username' size='lg' type='text' name='username' />
+            <Input label='Password' size='lg' type='password' name='password' />
+            <div className='-ml-2.5'>
+              <Checkbox label='Remember Me' />
+            </div>
+            <Button variant='gradient' fullWidth type={btnType}>
+              {btnLabel}
+            </Button>
+          </CardBody>
+        </Form>
         <CardFooter className='pt-0'>
-          <Button variant='gradient' fullWidth>
-            {btnLabel}
-          </Button>
           <Typography variant='small' className='mt-6 flex justify-center'>
             Don&apos;t have an account?
             <Typography
@@ -43,7 +47,7 @@ function CardComponent({ title, btnLabel }) {
               color='blue-gray'
               className='ml-1 font-bold'
             >
-              Sign up
+              {linkLabel}
             </Typography>
           </Typography>
         </CardFooter>
