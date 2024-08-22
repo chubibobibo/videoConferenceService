@@ -6,6 +6,7 @@ import HomeLayout from "./pages/HomeLayout";
 import LoginPage from "./pages/authPages/LoginPage";
 import RegisterPage from "./pages/authPages/RegisterPage";
 import IndexPage from "./pages/authPages/IndexPage";
+import ErrorPage from "./pages/ErrorPage";
 
 /** action function */
 import { action as loginAction } from "./pages/authPages/LoginPage";
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
