@@ -7,7 +7,14 @@ import withMT from "@material-tailwind/react/utils/withMT";
 export default withMT({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    colors: {
+      "custom-gray": "#a9afb5",
+    },
+    extend: {
+      colors: {
+        "custom-gray": "#a9afb5",
+      },
+    },
   },
   plugins: [],
 });

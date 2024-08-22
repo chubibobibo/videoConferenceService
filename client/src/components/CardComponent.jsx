@@ -10,25 +10,50 @@ import {
   Button,
 } from "@material-tailwind/react";
 
+/** react icons */
+import { IoEye, IoEyeOff } from "react-icons/io5";
+
 import { Form } from "react-router-dom";
+import { useState } from "react";
 
 function CardComponent({ title, btnLabel, linkLabel, btnType }) {
+  /** state to handle the eye icon for displaying password */
+  const [isHidden, setIsHidden] = useState(true);
+
+  /** @handleHidden changes the eye icon and changes the type of input(password / text) */
+  const handleHidden = () => {
+    setIsHidden(!isHidden);
+  };
+
   return (
     <>
-      <Card className='w-96'>
+      <Card className='w-98 h-fit '>
         <CardHeader
           variant='gradient'
-          color='gray'
-          className='mb-4 grid h-28 place-items-center'
+          //   color='custom-gray'
+          className='mb-4 grid h-82 place-items-center '
         >
-          <Typography variant='h3' color='white'>
+          <img src='./src/assets/ConvoFlow.png' alt='' />
+          {/* <Typography variant='h3' color='white'>
             {title}
-          </Typography>
+          </Typography> */}
         </CardHeader>
         <Form method='post'>
           <CardBody className='flex flex-col gap-4'>
             <Input label='Username' size='lg' type='text' name='username' />
-            <Input label='Password' size='lg' type='password' name='password' />
+            <Input
+              label='Password'
+              size='lg'
+              type={isHidden ? "password" : "text"}
+              name='password'
+              icon={
+                isHidden ? (
+                  <IoEye onClick={handleHidden} className='cursor-pointer' />
+                ) : (
+                  <IoEyeOff onClick={handleHidden} className='cursor-pointer' />
+                )
+              }
+            />
             <div className='-ml-2.5'>
               <Checkbox label='Remember Me' />
             </div>
