@@ -10,6 +10,7 @@ import ErrorPage from "./pages/ErrorPage";
 
 /** action function */
 import { action as loginAction } from "./pages/authPages/LoginPage";
+import { action as registerAction } from "./pages/authPages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterPage />,
+        action: registerAction,
       },
     ],
   },

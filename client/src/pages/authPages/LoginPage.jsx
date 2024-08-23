@@ -13,6 +13,7 @@ import axios from "axios";
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+  // console.log(data);
   try {
     await axios.post("/api/users/login", data);
     toast.success("User is logged in");
@@ -36,6 +37,8 @@ function LoginPage() {
         btnLabel={"Login"}
         linkLabel={"Register"}
         btnType={"submit"}
+        linkTxt={" Don't have an account?"}
+        linkRef={"/register"}
       />
     </Wrapper>
   );
