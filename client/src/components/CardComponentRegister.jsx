@@ -6,7 +6,6 @@ import {
   CardFooter,
   Typography,
   Input,
-  Checkbox,
   Button,
 } from "@material-tailwind/react";
 
@@ -16,7 +15,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Form } from "react-router-dom";
 import { useState } from "react";
 
-function CardComponent({
+function CardComponentRegister({
   title,
   btnLabel,
   linkLabel,
@@ -25,11 +24,15 @@ function CardComponent({
   linkRef,
 }) {
   /** state to handle the eye icon for displaying password */
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHiddenPwd1, setIsHiddenPwd1] = useState(true);
+  const [isHiddenPwd2, setIsHiddenPwd2] = useState(true);
 
   /** @handleHidden changes the eye icon and changes the type of input(password / text) */
-  const handleHidden = () => {
-    setIsHidden(!isHidden);
+  const handleHiddenPwd1 = () => {
+    setIsHiddenPwd1(!isHiddenPwd1);
+  };
+  const handleHiddenPwd2 = () => {
+    setIsHiddenPwd2(!isHiddenPwd2);
   };
 
   return (
@@ -48,22 +51,51 @@ function CardComponent({
         <Form method='post'>
           <CardBody className='flex flex-col gap-4'>
             <Input label='Username' size='lg' type='text' name='username' />
+            <Input label='First name' size='lg' type='text' name='firstName' />
+            <Input label='Last name' size='lg' type='text' name='lastName' />
+            <Input label='Email' size='lg' type='email' name='email' />
+            {/** password 1 */}
             <Input
               label='Password'
               size='lg'
-              type={isHidden ? "password" : "text"}
-              name='password'
+              type={isHiddenPwd1 ? "password" : "text"}
+              name='pwd1'
               icon={
-                isHidden ? (
-                  <IoEye onClick={handleHidden} className='cursor-pointer' />
+                isHiddenPwd1 ? (
+                  <IoEye
+                    onClick={handleHiddenPwd1}
+                    className='cursor-pointer'
+                  />
                 ) : (
-                  <IoEyeOff onClick={handleHidden} className='cursor-pointer' />
+                  <IoEyeOff
+                    onClick={handleHiddenPwd1}
+                    className='cursor-pointer'
+                  />
                 )
               }
             />
-            <div className='-ml-2.5'>
-              <Checkbox label='Remember Me' />
-            </div>
+
+            {/** password 2 */}
+            <Input
+              label='Re-enter your password'
+              size='lg'
+              type={isHiddenPwd2 ? "password" : "text"}
+              name='pwd2'
+              icon={
+                isHiddenPwd2 ? (
+                  <IoEye
+                    onClick={handleHiddenPwd2}
+                    className='cursor-pointer'
+                  />
+                ) : (
+                  <IoEyeOff
+                    onClick={handleHiddenPwd2}
+                    className='cursor-pointer'
+                  />
+                )
+              }
+            />
+
             <Button variant='gradient' fullWidth type={btnType}>
               {btnLabel}
             </Button>
@@ -87,4 +119,4 @@ function CardComponent({
     </>
   );
 }
-export default CardComponent;
+export default CardComponentRegister;

@@ -6,11 +6,14 @@ function ErrorPage() {
   const error = useRouteError();
   console.log(error);
   return (
-    <main className='flex justify-center flex-col items-center h-fit'>
+    <main className='flex justify-center flex-col items-center'>
       {error.status === 404 ? (
-        <img src='./src/assets/404.png' />
+        <img
+          src='./src/assets/404.png'
+          className='sm:h-[40rem] w-auto h-[15rem]'
+        />
       ) : (
-        <img src='.src/assets/error.png className w-fit' />
+        <img src='.src/assets/error.png' className='w-fit' />
       )}
       <Link to='/'>
         {" "}
