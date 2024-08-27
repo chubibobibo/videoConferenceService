@@ -1,4 +1,12 @@
+import { Outlet } from "react-router-dom";
+import Banner from "../components/Banner";
+
 function DashboardLayout() {
-  return <div>DashboardLayout</div>;
+  return (
+    <>
+      <Banner />
+      <Outlet />
+    </>
+  );
 }
 export default DashboardLayout;

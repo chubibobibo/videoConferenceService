@@ -2,7 +2,7 @@
 import CardComponent from "../../components/CardComponent";
 
 /** styled components */
-import { Wrapper } from "../../assets/Wrappers/CardWrapper";
+import { Wrapper } from "../../assets/Wrappers/CardLoginWrapper";
 
 import { redirect } from "react-router-dom";
 import { toast } from "react-toastify";

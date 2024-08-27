@@ -7,6 +7,8 @@ import LoginPage from "./pages/authPages/LoginPage";
 import RegisterPage from "./pages/authPages/RegisterPage";
 import IndexPage from "./pages/authPages/IndexPage";
 import ErrorPage from "./pages/ErrorPage";
+import RoomPage from "./pages/dashboardPages/RoomPage";
+import DashboardLayout from "./pages/DashboardLayout";
 
 /** action function */
 import { action as loginAction } from "./pages/authPages/LoginPage";
@@ -31,6 +33,16 @@ const router = createBrowserRouter([
         path: "register",
         element: <RegisterPage />,
         action: registerAction,
+      },
+      {
+        path: "dashboard",
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "room",
+            element: <RoomPage />,
+          },
+        ],
       },
     ],
   },
