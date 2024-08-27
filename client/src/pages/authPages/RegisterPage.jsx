@@ -1,4 +1,3 @@
-import CardComponent from "../../components/CardComponent";
 import CardComponentRegister from "../../components/CardComponentRegister";
 
 /** styled component */
