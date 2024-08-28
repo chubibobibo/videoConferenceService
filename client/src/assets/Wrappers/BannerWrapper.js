@@ -47,12 +47,20 @@ export const Wrapper = styled.div`
     align-items: center;
     padding: 1rem;
 
+    .icon {
+      position: absolute;
+      color: black;
+      margin-left: 17%;
+      cursor: pointer;
+    }
+
     /** text input for room */
     .room-input {
       width: 20rem;
       height: 3rem;
       color: black;
       border: 1px solid white;
+      padding: 5px;
     }
     .room-input:hover {
       border: 2px solid green;
