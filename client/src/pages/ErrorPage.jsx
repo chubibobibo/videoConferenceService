@@ -9,7 +9,7 @@ function ErrorPage() {
     <main className='flex justify-center flex-col items-center'>
       {error.status === 404 ? (
         <img
-          src='./src/assets/404.png'
+          src='../src/assets/404.png'
           className='sm:h-[40rem] w-auto h-[15rem]'
         />
       ) : (

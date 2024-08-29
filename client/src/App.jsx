@@ -9,10 +9,12 @@ import IndexPage from "./pages/authPages/IndexPage";
 import ErrorPage from "./pages/ErrorPage";
 import RoomPage from "./pages/dashboardPages/RoomPage";
 import DashboardLayout from "./pages/DashboardLayout";
+import RoomTable from "./components/RoomTable";
 
 /** action function */
 import { action as loginAction } from "./pages/authPages/LoginPage";
 import { action as registerAction } from "./pages/authPages/RegisterPage";
+import RoomUpcomingMeeting from "./components/RoomUpcomingMeeting";
 
 const router = createBrowserRouter([
   {
@@ -35,12 +37,20 @@ const router = createBrowserRouter([
         action: registerAction,
       },
       {
+        path: "room",
+        element: <RoomPage />,
+      },
+      {
         path: "dashboard",
         element: <DashboardLayout />,
         children: [
           {
-            path: "room",
-            element: <RoomPage />,
+            path: "roomTable",
+            element: <RoomTable />,
+          },
+          {
+            path: "roomMeetings",
+            element: <RoomUpcomingMeeting />,
           },
         ],
       },

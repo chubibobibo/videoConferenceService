@@ -2,27 +2,27 @@ import { Outlet } from "react-router-dom";
 import Banner from "../components/Banner";
 
 import { createContext, useState } from "react";
+import { Wrapper } from "../assets/Wrappers/DashboardLayoutWrapper";
+import Footer from "../components/Footer";
 
 /** @DashboardLayoutContext used to pass data to any component it is wrapped on */
 export const DashboardLayoutContext = createContext();
 
 function DashboardLayout() {
-  /** @isEmpty stores the data for the close icon to appear */
+  /** @inputData stores the data for the close icon to appear */
   const [inputData, setInputData] = useState("");
-  // const handleChange = (e) => {
-  //   setInputData((oldData) => {
-  //     return { ...oldData, [e.target.name]: e.target.value };
-  //   });
-  // };
+
+  /** @handleChange sets state depending on the changes in the input field */
   const handleChange = (e) => {
     setInputData(e.target.value);
   };
 
+  /**@handleClick empties the input field*/
   const handleClick = () => {
     setInputData("");
   };
   return (
-    <>
+    <Wrapper>
       <DashboardLayoutContext.Provider
         value={{
           inputData: inputData,
@@ -33,8 +33,9 @@ function DashboardLayout() {
       >
         <Banner />
         <Outlet />
+        <Footer />
       </DashboardLayoutContext.Provider>
-    </>
+    </Wrapper>
   );
 }
 export default DashboardLayout;

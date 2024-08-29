@@ -1,6 +1,5 @@
 import { Wrapper } from "../assets/Wrappers/BannerWrapper";
 import { Button } from "@material-tailwind/react";
-import { Input } from "@material-tailwind/react";
 
 import { useContext } from "react";
 import { DashboardLayoutContext } from "../pages/DashboardLayout";
@@ -8,11 +7,11 @@ import { DashboardLayoutContext } from "../pages/DashboardLayout";
 /** react icons */
 import { IoClose } from "react-icons/io5";
 
+/** @useContext destructured the values passed in the DashboardLayout component */
 function Banner() {
   const { inputData, handleChange, handleClick } = useContext(
     DashboardLayoutContext
   );
-  // console.log(isEmpty);
 
   return (
     <Wrapper>
@@ -32,7 +31,7 @@ function Banner() {
         {/* {isEmpty && <IoClose className='icon' onClick={handleClick} />} */}
         <IoClose className='icon' onClick={handleClick} />
         <div className='button-container'>
-          <Button size='lg'>Create call</Button>
+          <Button>Create call</Button>
           <Button>Join call</Button>
         </div>
       </div>
