@@ -41,9 +41,6 @@ function CardComponent({
           className='mb-4 grid h-82 place-items-center '
         >
           <img src='./src/assets/ConvoFlow.png' alt='' />
-          {/* <Typography variant='h3' color='white'>
-            {title}
-          </Typography> */}
         </CardHeader>
         <Form method='post'>
           <CardBody className='flex flex-col gap-4'>
