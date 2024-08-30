@@ -8,7 +8,7 @@ function Footer() {
         <Typography color='blue-gray' className='font-normal'>
           &copy; 2024 ConvoFlow
         </Typography>
-        <ul className='flex flex-wrap items-center gap-y-2 gap-x-8'>
+        <ul className='flex  items-center gap-y-2 gap-x-8'>
           <li>
             <Typography
               as='a'
