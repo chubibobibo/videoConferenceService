@@ -37,7 +37,7 @@ export const Wrapper = styled.div`
 
   /** container for the input text to enter room name */
   .roomInput-container {
-    width: 40%;
+    width: 35%;
     /* height: 100%; */
     background-color: white;
     margin-top: 2rem;
@@ -59,7 +59,7 @@ export const Wrapper = styled.div`
 
     /** text input for room */
     .room-input {
-      width: 50%;
+      width: 60%;
       height: 3rem;
       color: black;
       border: 1px solid white;
@@ -84,7 +84,7 @@ export const Wrapper = styled.div`
     }
   }
 
-  @media only screen and (max-width: 1260px) {
+  @media only screen and (max-width: 1790px) {
     .roomInput-container {
       display: flex;
       justify-content: space-between;
@@ -107,7 +107,7 @@ export const Wrapper = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 540px) {
+  @media only screen and (max-width: 1080px) {
     .roomInput-container {
       display: flex;
       justify-content: space-between;
@@ -115,7 +115,31 @@ export const Wrapper = styled.div`
       flex-direction: column;
       padding: 1rem;
       gap: 1rem;
-      width: 60%;
+      width: 50%;
+
+      .room-input {
+        border: 2px solid green;
+        border-radius: 10px;
+        width: 80%;
+      }
+
+      /* .icon {
+        margin-left: 40%;
+        margin-top: 2%;
+        align-content: center;
+      } */
+    }
+  }
+
+  @media only screen and (max-width: 435px) {
+    .roomInput-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+      padding: 1rem;
+      gap: 1rem;
+      width: 90%;
 
       .room-input {
         border: 2px solid green;
@@ -124,27 +148,9 @@ export const Wrapper = styled.div`
       }
 
       .icon {
-        margin-left: 40%;
+        margin-left: 60%;
         margin-top: 2%;
         align-content: center;
-      }
-    }
-  }
-
-  @media only screen and (max-width: 375px) {
-    .roomInput-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: column;
-      padding: 1rem;
-      gap: 1rem;
-      width: 80%;
-
-      .room-input {
-        border: 2px solid green;
-        border-radius: 10px;
-        width: 100%;
       }
     }
   }
