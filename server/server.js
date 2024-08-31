@@ -16,8 +16,33 @@ import passport from "passport";
 
 const app = express();
 
-/** parsing of json */
+/** Socket.io */
+/** @http to create an http server that socket.io can attach to */
+/** @Server is socket.io that will upgrade the http server into a web socket connection (bidirectional communication) */
+import { Server } from "socket.io";
+import http from "http";
+
+/** @server created a new http server that will be upgraded into web socket connection using socket.io */
+/** @app express app that is used as argument in the creation of a new http server. */
+/** @io new instance of socket.io server. Basically transforms http server into a web socket connection */
+/** @origin allows requests from any origin */
+/** @methods allowed http methods */
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+  },
+});
+
+/** Establish Socket Connection */
+/** @io io.on listens for 'connection' then executes the specified callback fn */
+io.on("connection", () => {
+  console.log("User is connected");
+});
+
 app.use(cors());
+/** parsing of json */
 app.use(express.json());
 
 /** Connecting to database */
@@ -93,6 +118,6 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log(`SERVING PORT ${process.env.PORT}`);
 });
