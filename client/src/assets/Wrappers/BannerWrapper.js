@@ -17,6 +17,13 @@ export const Wrapper = styled.div`
   flex-direction: column;
   color: white;
 
+  .nav {
+    width: 90%;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+  }
+
   .image-container {
     width: 8rem;
     height: 8rem;

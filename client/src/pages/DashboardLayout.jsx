@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Banner from "../components/Banner";
+import Footer from "../components/Footer";
+// import Nav from "../components/Nav";
 
 import { createContext, useState } from "react";
 import { Wrapper } from "../assets/Wrappers/DashboardLayoutWrapper";
-import Footer from "../components/Footer";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /** @DashboardLayoutContext used to pass data to any component it is wrapped on */
 export const DashboardLayoutContext = createContext();
@@ -42,7 +43,9 @@ function DashboardLayout() {
           handleClick: handleClick,
         }}
       >
+        {/* <Nav /> */}
         <Banner />
+
         <div className='table-container'>
           <div className='table-header'>
             <button className='upcoming-btn' onClick={navToUpcoming}>
