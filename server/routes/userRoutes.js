@@ -1,7 +1,12 @@
 import express from "express";
 const router = express.Router();
 
-import { register, login, logout } from "../controllers/userController.js";
+import {
+  register,
+  login,
+  logout,
+  loggedUser,
+} from "../controllers/userController.js";
 
 /** rate limiter for API requests */
 import { limiter } from "../middleware/rateLimiter.js";
@@ -43,5 +48,7 @@ router.post("/login", limiter, loginUserValidation, (req, res, next) => {
 
 /** logout route */
 router.post("/logout", logout);
+
+router.get("/loggedUser", loggedUser);
 
 export default router;

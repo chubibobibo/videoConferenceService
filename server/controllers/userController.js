@@ -53,3 +53,15 @@ export const logout = (req, res, next) => {
     res.status(200).json({ message: "User logged out" });
   });
 };
+
+/** get logged user */
+export const loggedUser = async (req, res) => {
+  if (!req.user) {
+    res.status(400).json({ message: "No user logged in" });
+  }
+  const user = await UserModel.findById(req.user.id);
+  if (!user) {
+    throw new ExpressError("No logged user", 400);
+  }
+  res.status(200).json({ message: "Logged user", user });
+};
