@@ -18,6 +18,8 @@ import {
 } from "../middleware/inputValidation.js";
 import passport from "passport";
 
+// import { authUser } from "../middleware/userAuthorization.js";
+
 router.post("/register", registerUserValidation, register);
 
 /** Login route */
@@ -46,9 +48,8 @@ router.post("/login", limiter, loginUserValidation, (req, res, next) => {
   })(req, res, next);
 });
 
+router.get("/loggedUser", loggedUser);
 /** logout route */
 router.post("/logout", logout);
-
-router.get("/loggedUser", loggedUser);
 
 export default router;

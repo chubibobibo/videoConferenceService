@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 dotenv.config();
 import cors from "cors";
+import { v4 as uuidv4 } from "uuid";
 
 import userRoutes from "./routes/userRoutes.js";
 
@@ -34,11 +35,28 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PATCH", "DELETE"],
   },
 });
-
 /** Establish Socket Connection */
 /** @io io.on listens for 'connection' then executes the specified callback fn */
-io.on("connection", () => {
+/** @socket parameter is an object that represents connection to a specific client */
+/** @roomId id passed during emit when room is created, then passed the id itself in the emit for the listener to have access to it. */
+/** @roomId received from the emit in the RoomPage will be used in the listener for join room as argument for socket.join() */
+io.on("connection", (socket) => {
   console.log("User is connected");
+  /** listener for creating room, emit coming from Banner component when button is create room button is clicked*/
+  socket.on("create-room", () => {
+    console.log("User created room");
+    const roomId = uuidv4();
+    socket.emit("room-created", { roomId });
+  });
+  /** Listener for "join-room" */
+  socket.on("join-room", ({ roomId }) => {
+    console.log("User joined the room");
+    socket.join(roomId);
+  });
+  /** Disconnecting socket connection */
+  socket.on("disconnect", () => {
+    console.log("Disconnected");
+  });
 });
 
 app.use(cors());
