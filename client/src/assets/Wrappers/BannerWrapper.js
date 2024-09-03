@@ -17,11 +17,39 @@ export const Wrapper = styled.div`
   flex-direction: column;
   color: white;
 
+  .modal-container {
+    width: 100%;
+    height: 30%;
+    background-color: red;
+    display: flex;
+    justify-content: end;
+  }
+
   .nav {
     width: 90%;
     display: flex;
     justify-content: end;
     gap: 10px;
+
+    p {
+      text-transform: capitalize;
+    }
+
+    .modal-container {
+      background-color: rgba(38, 45, 57, 0.5);
+      /* background-color: #262d39; */
+      width: 25%;
+      z-index: 0;
+      top: 50%;
+      left: 55%;
+      transform: translate(65%, -150%);
+      position: absolute;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .image-container {

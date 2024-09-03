@@ -1,14 +1,18 @@
-import { io } from "socket.io-client";
 import { useEffect } from "react";
+/** allows to obtain params like the roomId */
+import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { RoomSocketContext } from "../../context/RoomContextProvider";
 
 function RoomPage() {
-  /** @WS stores the web socket url */
-  const WS = "http://localhost:3001";
+  /** @id params from the emitted create-room in RoomcontextProvider*/
+  const { id } = useParams();
+  const { ws } = useContext(RoomSocketContext);
 
-  /** Initialize a websocket connection upon mounting of component */
   useEffect(() => {
-    io(WS);
-  }, []);
-  return <div>RoomPage</div>;
+    ws.emit("join-room", { roomId: id });
+  }, [id]);
+
+  return <div>Room {id}</div>;
 }
 export default RoomPage;

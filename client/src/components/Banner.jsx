@@ -1,41 +1,51 @@
 import { Wrapper } from "../assets/Wrappers/BannerWrapper";
 import { Button } from "@material-tailwind/react";
 
-import { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { DashboardLayoutContext } from "../pages/DashboardLayout";
-import Nav from "../components/Nav";
+import { useContext, useState } from "react";
 
-// /** API to fetch logged user used in react query */
-import { loggedUser } from "../api/fetchLoggedUser.js";
+import { DashboardLayoutContext } from "../pages/DashboardLayout";
+import { RoomSocketContext } from "../context/RoomContextProvider";
+
+import Nav from "../components/Nav";
 
 /** react icons */
 import { IoClose } from "react-icons/io5";
 
-/** @useContext destructured the values passed in the DashboardLayout component */
 function Banner() {
-  const { inputData, handleChange, handleClick } = useContext(
+  /** @useContext destructured the values passed in the DashboardLayout component */
+  const { inputData, handleChange, handleClick, userData } = useContext(
     DashboardLayoutContext
   );
 
-  const { data, error } = useQuery({
-    queryKey: ["user"],
-    queryFn: loggedUser,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-  });
-  /** check for error in react query */
-  if (error) {
-    console.log(error);
-  }
+  /** @ws web socket connection passed from the RoomSocketContext created in the RoomContextProvider component. */
+  const { ws } = useContext(RoomSocketContext);
+  // console.log(ws);
+
+  /** @isHidden state for displaying the modal for the login in navbar */
+  const [isHidden, setIsHidden] = useState(true);
+  const handleHidden = () => {
+    setIsHidden(!isHidden);
+  };
+
+  /** onClick function to connect to websocket server when user creates room */
+  const createRoom = () => {
+    ws.emit("create-room");
+  };
 
   /** @Nav component css is found in BannerWrapper.js */
 
   return (
     <Wrapper>
-      <Nav loggedUser={data} />
+      {userData?.response?.status !== 400 ? (
+        <Nav
+          userData={userData}
+          handleHidden={handleHidden}
+          isHidden={isHidden}
+        />
+      ) : (
+        <Nav />
+      )}
+
       <div className='image-container'>
         <img src='../src/assets/ConvoFlow.png' alt='' />
       </div>
@@ -52,7 +62,7 @@ function Banner() {
         {/* {isEmpty && <IoClose className='icon' onClick={handleClick} />} */}
         <IoClose className='icon' onClick={handleClick} />
         <div className='button-container'>
-          <Button>Create call</Button>
+          <Button onClick={createRoom}>Create call</Button>
           <Button>Join call</Button>
         </div>
       </div>
