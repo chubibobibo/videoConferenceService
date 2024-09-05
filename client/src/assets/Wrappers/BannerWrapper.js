@@ -18,38 +18,27 @@ export const Wrapper = styled.div`
   color: white;
 
   .modal-container {
-    width: 100%;
-    height: 30%;
-    background-color: red;
+    background-color: rgba(38, 45, 57, 0.5);
+    height: 20%;
+    width: 25%;
+    z-index: 0;
+    top: 50%;
+    left: 55%;
+    transform: translate(65%, -200%);
+    position: absolute;
+    border-radius: 10px;
     display: flex;
-    justify-content: end;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav {
-    width: 90%;
+    width: 80%;
     display: flex;
     justify-content: end;
+    align-items: center;
     gap: 10px;
-
-    p {
-      text-transform: capitalize;
-    }
-
-    .modal-container {
-      background-color: rgba(38, 45, 57, 0.5);
-      /* background-color: #262d39; */
-      width: 25%;
-      z-index: 0;
-      top: 50%;
-      left: 55%;
-      transform: translate(65%, -150%);
-      position: absolute;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
   }
 
   .image-container {
@@ -103,7 +92,8 @@ export const Wrapper = styled.div`
       width: 60%;
       height: 3rem;
       color: black;
-      border: 1px solid white;
+      border: 2px solid green;
+      border-radius: 10px;
       padding: 5px;
       margin-right: 2%;
     }
@@ -125,7 +115,7 @@ export const Wrapper = styled.div`
     }
   }
 
-  @media only screen and (max-width: 1790px) {
+  @media only screen and (max-width: 1850px) {
     .roomInput-container {
       /* display: flex;
       justify-content: space-between;
@@ -152,7 +142,7 @@ export const Wrapper = styled.div`
       }
 
       .icon {
-        margin-left: 30%;
+        margin-left: 20%;
         margin-top: 0.5%;
         align-content: center;
       }
@@ -194,6 +184,28 @@ export const Wrapper = styled.div`
   }
 
   @media only screen and (max-width: 435px) {
+    .nav {
+      width: 100%;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      margin-bottom: 10px;
+
+      p {
+        font-size: 16px;
+      }
+
+      .modal-container {
+        width: 80%;
+        height: 30%;
+        z-index: 0;
+        top: 45%;
+        left: 2%;
+        position: absolute;
+        transform: translate(10%, -120%);
+        background-color: rgba(38, 45, 57, 1);
+      }
+    }
     .roomInput-container {
       /* display: flex;
       justify-content: space-between;
@@ -202,6 +214,7 @@ export const Wrapper = styled.div`
       padding: 1rem;
       gap: 1rem;
       width: 90%;
+      /* background-color: red; */
 
       .form {
         display: flex;

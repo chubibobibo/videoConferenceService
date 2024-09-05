@@ -104,8 +104,12 @@ export const Wrapper = styled.div`
     width: 85%;
   } */
   @media only screen and (max-width: 435px) {
+    .table-body {
+      width: 70%;
+    }
+
     .table-container {
-      width: 100%;
+      width: 90%;
       margin: 5px;
     }
     .upcoming-btn {
