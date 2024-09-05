@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import { useState } from "react";
 
+// import { Wrapper } from "../assets/Wrappers/NavWrapper";
+
 /** @loggedUser props passed from Banner.jsx. Data that comes from the react query to fetch logedUser  */
 function Nav({ userData, handleHidden, isHidden }) {
   const navigate = useNavigate();
@@ -26,7 +28,6 @@ function Nav({ userData, handleHidden, isHidden }) {
 
   return (
     <>
-      <img src='' alt='' />
       <div className='nav'>
         {userData ? (
           <>

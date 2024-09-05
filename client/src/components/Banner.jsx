@@ -10,7 +10,6 @@ import Nav from "../components/Nav";
 
 /** react icons */
 import { IoClose } from "react-icons/io5";
-import { Form } from "react-router-dom";
 
 function Banner() {
   /** @useContext destructured the values passed in the DashboardLayout component */
@@ -69,21 +68,19 @@ function Banner() {
       <h1>ConvoFlow</h1>
       <p>An accessible and secure video conference solution</p>
       <div className='roomInput-container'>
-        <Form method='post'>
-          <input
-            type='text'
-            className='room-input'
-            onChange={handleRoomDataChange}
-            value={roomData.roomName}
-            name='roomName'
-          />
-          {/* {isEmpty && <IoClose className='icon' onClick={handleClick} />} */}
-          <IoClose className='icon' onClick={handleClick} />
-          <div className='button-container'>
-            <Button onClick={createRoom}>Create call</Button>
-            <Button>Join call</Button>
-          </div>
-        </Form>
+        <input
+          type='text'
+          className='room-input'
+          onChange={handleRoomDataChange}
+          value={roomData.roomName}
+          name='roomName'
+        />
+        {/* {isEmpty && <IoClose className='icon' onClick={handleClick} />} */}
+        <IoClose className='icon' onClick={handleClick} />
+        <div className='button-container'>
+          <Button onClick={createRoom}>Create call</Button>
+          <Button>Join call</Button>
+        </div>
       </div>
     </Wrapper>
   );
