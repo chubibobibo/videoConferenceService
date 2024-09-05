@@ -3,13 +3,11 @@ import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 // import Nav from "../components/Nav";
 
-import { createContext, useState, useContext } from "react";
+import { createContext } from "react";
 import { Wrapper } from "../assets/Wrappers/DashboardLayoutWrapper";
 
 import { useNavigate, useLoaderData } from "react-router-dom";
 import axios from "axios";
-
-import RoomSocketContext from "../context/RoomContextProvider";
 
 /** @DashboardLayoutContext used to pass data to any component it is wrapped on */
 export const DashboardLayoutContext = createContext();
@@ -29,17 +27,6 @@ export const loader = async () => {
 };
 
 function DashboardLayout() {
-  /** @inputData stores the data for the close icon to appear */
-  const [inputData, setInputData] = useState("");
-  /** @handleChange sets state depending on the changes in the input field */
-  const handleChange = (e) => {
-    setInputData(e.target.value);
-  };
-  /**@handleClick empties the input field*/
-  const handleClick = () => {
-    setInputData("");
-  };
-
   /** user data from the loader function */
   const data = useLoaderData();
   // console.log(data);
@@ -56,14 +43,9 @@ function DashboardLayout() {
     <Wrapper>
       <DashboardLayoutContext.Provider
         value={{
-          inputData: inputData,
-          setInputData: setInputData,
-          handleChange: handleChange,
-          handleClick: handleClick,
           userData: data,
         }}
       >
-        {/* <Nav userData={data} /> */}
         <Banner />
 
         <div className='table-container'>
