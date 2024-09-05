@@ -17,11 +17,39 @@ export const Wrapper = styled.div`
   flex-direction: column;
   color: white;
 
+  .modal-container {
+    width: 100%;
+    height: 30%;
+    background-color: red;
+    display: flex;
+    justify-content: end;
+  }
+
   .nav {
     width: 90%;
     display: flex;
     justify-content: end;
     gap: 10px;
+
+    p {
+      text-transform: capitalize;
+    }
+
+    .modal-container {
+      background-color: rgba(38, 45, 57, 0.5);
+      /* background-color: #262d39; */
+      width: 25%;
+      z-index: 0;
+      top: 50%;
+      left: 55%;
+      transform: translate(65%, -150%);
+      position: absolute;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .image-container {
@@ -53,6 +81,12 @@ export const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
+
+    .form {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
 
     .icon {
       position: absolute;
@@ -93,13 +127,23 @@ export const Wrapper = styled.div`
 
   @media only screen and (max-width: 1790px) {
     .roomInput-container {
-      display: flex;
+      /* display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-direction: column;
+      flex-direction: column; */
       padding: 1rem;
       gap: 1rem;
       width: 40%;
+
+      .form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        width: 90%;
+      }
 
       .room-input {
         border: 2px solid green;
@@ -120,33 +164,20 @@ export const Wrapper = styled.div`
       justify-content: space-between;
       align-items: center;
       flex-direction: column;
-      padding: 1rem;
-      gap: 1rem;
-      width: 50%;
-
-      .room-input {
-        border: 2px solid green;
-        border-radius: 10px;
-        width: 80%;
-      }
-
-      /* .icon {
-        margin-left: 40%;
-        margin-top: 2%;
-        align-content: center;
-      } */
-    }
-  }
-
-  @media only screen and (max-width: 435px) {
-    .roomInput-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: column;
-      padding: 1rem;
+      /* padding: 1rem; */
       gap: 1rem;
       width: 90%;
+      margin: 0;
+
+      .form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        width: 90%;
+      }
 
       .room-input {
         border: 2px solid green;
@@ -155,7 +186,41 @@ export const Wrapper = styled.div`
       }
 
       .icon {
-        margin-left: 60%;
+        margin-left: 65%;
+        margin-top: 1%;
+        align-content: center;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 435px) {
+    .roomInput-container {
+      /* display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column; */
+      padding: 1rem;
+      gap: 1rem;
+      width: 90%;
+
+      .form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .room-input {
+        border: 2px solid green;
+        border-radius: 10px;
+        width: 100%;
+      }
+
+      .icon {
+        margin-left: 50%;
         margin-top: 2%;
         align-content: center;
       }

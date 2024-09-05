@@ -3,30 +3,36 @@ import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 // import Nav from "../components/Nav";
 
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { Wrapper } from "../assets/Wrappers/DashboardLayoutWrapper";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLoaderData } from "react-router-dom";
+import axios from "axios";
 
 /** @DashboardLayoutContext used to pass data to any component it is wrapped on */
 export const DashboardLayoutContext = createContext();
 
+/** Loader function to fetch logged userData from API */
+export const loader = async () => {
+  try {
+    const loggedUserData = await axios.get("/api/users/loggedUser");
+    if (!loggedUserData) {
+      return "Something went wrong";
+    } else {
+      return loggedUserData;
+    }
+  } catch (err) {
+    return null;
+  }
+};
+
 function DashboardLayout() {
-  /** @inputData stores the data for the close icon to appear */
-  const [inputData, setInputData] = useState("");
+  /** user data from the loader function */
+  const data = useLoaderData();
+  // console.log(data);
 
-  /** @handleChange sets state depending on the changes in the input field */
-  const handleChange = (e) => {
-    setInputData(e.target.value);
-  };
-
-  /**@handleClick empties the input field*/
-  const handleClick = () => {
-    setInputData("");
-  };
-
-  const navigate = useNavigate();
   /**@navToRecent function to navigate upon clicking the buttons */
+  const navigate = useNavigate();
   const navToRecent = () => {
     navigate("/dashboard/roomTable");
   };
@@ -37,13 +43,9 @@ function DashboardLayout() {
     <Wrapper>
       <DashboardLayoutContext.Provider
         value={{
-          inputData: inputData,
-          setInputData: setInputData,
-          handleChange: handleChange,
-          handleClick: handleClick,
+          userData: data,
         }}
       >
-        {/* <Nav /> */}
         <Banner />
 
         <div className='table-container'>

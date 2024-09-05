@@ -10,11 +10,15 @@ import ErrorPage from "./pages/ErrorPage";
 import RoomPage from "./pages/dashboardPages/RoomPage";
 import DashboardLayout from "./pages/DashboardLayout";
 import RoomTable from "./components/RoomTable";
+import RoomUpcomingMeeting from "./components/RoomUpcomingMeeting";
 
 /** action function */
 import { action as loginAction } from "./pages/authPages/LoginPage";
 import { action as registerAction } from "./pages/authPages/RegisterPage";
-import RoomUpcomingMeeting from "./components/RoomUpcomingMeeting";
+import { loader as loggedUserDataLoader } from "./pages/DashboardLayout";
+
+/** Context imports */
+import RoomContext from "./context/RoomContextProvider";
 
 const router = createBrowserRouter([
   {
@@ -36,13 +40,24 @@ const router = createBrowserRouter([
         element: <RegisterPage />,
         action: registerAction,
       },
+      /** Wraps RoomPage with the context to pass web socket connection */
       {
-        path: "room",
-        element: <RoomPage />,
+        path: "room/:id",
+        element: (
+          <RoomContext>
+            <RoomPage />
+          </RoomContext>
+        ),
       },
+      /** Wraps RoomPage with the context to pass web socket connection */
       {
         path: "dashboard",
-        element: <DashboardLayout />,
+        element: (
+          <RoomContext>
+            <DashboardLayout />
+          </RoomContext>
+        ),
+        loader: loggedUserDataLoader,
         children: [
           {
             path: "roomTable",

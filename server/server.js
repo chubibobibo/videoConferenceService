@@ -5,6 +5,7 @@ dotenv.config();
 import cors from "cors";
 
 import userRoutes from "./routes/userRoutes.js";
+import roomRoutes from "./routes/roomRoutes.js";
 
 /** Session */
 import MongoStore from "connect-mongo";
@@ -13,6 +14,8 @@ import { UserModel } from "./models/UserSchema.js";
 
 import passport from "passport";
 // import localStrategy from "passport-local";
+
+import { roomHandler } from "./sockets/RoomHandler.js";
 
 const app = express();
 
@@ -34,11 +37,17 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PATCH", "DELETE"],
   },
 });
-
 /** Establish Socket Connection */
 /** @io io.on listens for 'connection' then executes the specified callback fn */
-io.on("connection", () => {
+/** @socket parameter is an object that represents connection to a specific client */
+/** @roomHandler contains socket listeners from client */
+io.on("connection", (socket) => {
   console.log("User is connected");
+  roomHandler(socket);
+  /** Disconnecting socket connection */
+  socket.on("disconnect", () => {
+    console.log("Disconnected");
+  });
 });
 
 app.use(cors());
@@ -105,6 +114,7 @@ passport.deserializeUser(UserModel.deserializeUser());
 
 /** Routes */
 app.use("/api/users", userRoutes);
+app.use("/api/rooms", roomRoutes);
 
 /** handler for page not found */
 app.use("*", (req, res, next) => {

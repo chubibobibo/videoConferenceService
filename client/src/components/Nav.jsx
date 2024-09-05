@@ -3,8 +3,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+import LoginModal from "./LoginModal";
+import { useState } from "react";
+
 /** @loggedUser props passed from Banner.jsx. Data that comes from the react query to fetch logedUser  */
-function Nav({ loggedUser }) {
+function Nav({ userData, handleHidden, isHidden }) {
   const navigate = useNavigate();
 
   /** @handleClickLogout handles logging out and redirection to the login page */
@@ -14,18 +17,23 @@ function Nav({ loggedUser }) {
     return navigate("/login");
   };
 
-  const handleClickRedirect = () => {
-    navigate("/login");
+  const [isShowPwd, setIsShowPwd] = useState(false);
+
+  /** @handleShowPwd */
+  const handleShowPwd = () => {
+    setIsShowPwd(!isShowPwd);
   };
 
   return (
     <>
       <img src='' alt='' />
       <div className='nav'>
-        {loggedUser ? (
+        {userData ? (
           <>
             {" "}
-            <p>Welcome {loggedUser?.data?.user?.username}</p>
+            <p>
+              Welcome <span>{userData?.data?.user?.username}</span>
+            </p>
             <Button size='sm' color='white' onClick={handleClickLogout}>
               Logout
             </Button>
@@ -34,9 +42,17 @@ function Nav({ loggedUser }) {
           <>
             {" "}
             <p>Welcome Guest</p>
-            <Button size='sm' color='white' onClick={handleClickRedirect}>
+            <Button size='sm' color='white' onClick={handleHidden}>
               Login
             </Button>
+            {!isHidden && (
+              <div className='modal-container'>
+                <LoginModal
+                  handleShowPwd={handleShowPwd}
+                  isShowPwd={isShowPwd}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
