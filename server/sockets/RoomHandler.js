@@ -13,7 +13,7 @@ export const roomHandler = (socket) => {
     console.log("User created room");
     const roomId = uuidv4();
     await RoomModel.create({ roomId: roomId, roomName: roomName });
-    socket.emit("room-created", { roomId });
+    socket.emit("room-created", { roomId, roomName });
   });
   /** Listener for "join-room" */
   socket.on("join-room", ({ roomId }) => {
