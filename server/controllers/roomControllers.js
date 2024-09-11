@@ -12,3 +12,16 @@ export const createRoom = async (req, res) => {
   }
   res.status(200).json({ message: "New room created", newRoom });
 };
+
+/** get room name controller */
+export const getRoomName = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    throw new ExpressError("No id availbale", 400);
+  }
+  const foundRoomName = await RoomModel.findOne({ roomId: id });
+  if (!foundRoomName) {
+    throw new ExpressError("Room cannot be found", 400);
+  }
+  res.status(200).json({ message: "room found", foundRoomName });
+};

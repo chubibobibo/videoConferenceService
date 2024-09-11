@@ -17,7 +17,7 @@ function RoomContextProvider({ children }) {
   const navigate = useNavigate();
 
   /** @me state that will handle the id of the user */
-  const [me, setMe] = useState();
+  const [me, setMe] = useState({ username: "", userId: "" });
 
   /** @WS stores the web socket url */
   /** @ws initialized web socket connection client side using the web socket url (server side) */
@@ -28,30 +28,44 @@ function RoomContextProvider({ children }) {
   /** @enterRoom function that accepts roomId emitted from the server whenever a room is created. */
   /** This runs in in the listener for the create-room emit upon component mount (useEffect) */
   /** Then navigates to a RoomPage with a specific room id based on the roomId received. */
-  const enterRoom = ({ roomId }) => {
+  const enterRoom = async ({ roomId }) => {
     console.log({ roomId });
-    navigate(`/room/${roomId}`);
-  };
-
-  const getLoggedUser = async () => {
     await axios.get("/api/users/loggedUser").then((res) => {
-      // console.log(res.data.user.username);
       const userDataName = res?.data?.user?.username;
       const userDataId = res?.data?.user?._id;
       setMe({ userName: userDataName, userId: userDataId });
+      // setMe((prevData) => {
+      //   return { ...prevData, userName: userDataName, userId: userDataId };
+      // });
       return;
     });
+
+    navigate(`/room/${roomId}`);
   };
-  console.log(me);
+
+  // const getLoggedUser = async () => {
+  //   await axios.get("/api/users/loggedUser").then((res) => {
+  //     // console.log(res.data.user.username);
+  //     const userDataName = res?.data?.user?.username;
+  //     const userDataId = res?.data?.user?._id;
+  //     console.log(userDataName);
+  //     console.log(userDataId);
+  //     setMe({ userName: userDataName, userId: userDataId });
+  //     // setMe((prevData) => {
+  //     //   return { ...prevData, userName: userDataName, userId: userDataId };
+  //     // });
+  //     return;
+  //   });
+  // };
 
   /** @useEffect runs on component mount and will listen to emit from server (room-created) then run the function enterRoom*/
   /** @useEffect should run whenever there are changes in the connection(ws) this is to allow creation/joining room if users back out of the page. */
   /** NOTE: backing out of RoomPage disconnects the connection */
   useEffect(() => {
-    getLoggedUser();
     ws.on("room-created", enterRoom);
   }, []);
 
+  console.log(me);
   return (
     <RoomSocketContext.Provider value={{ ws }}>
       {children}
