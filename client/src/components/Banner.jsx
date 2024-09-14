@@ -7,17 +7,22 @@ import { DashboardLayoutContext } from "../pages/DashboardLayout";
 import { RoomSocketContext } from "../context/RoomContextProvider";
 
 import Nav from "../components/Nav";
+import { useNavigate } from "react-router-dom";
 
 /** react icons */
 import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 function Banner() {
   /** @useContext destructured the values passed in the DashboardLayout component */
-  const { userData } = useContext(DashboardLayoutContext);
 
+  /** @userData context data containing userData from DashboardLayout */
+  const { userData } = useContext(DashboardLayoutContext);
   /** @ws web socket connection passed from the RoomSocketContext created in the RoomContextProvider component. */
   const { ws } = useContext(RoomSocketContext);
   // console.log(ws);
+
+  const navigate = useNavigate();
 
   /** @isHidden state for displaying the modal for the login in navbar */
   const [isHidden, setIsHidden] = useState(true);
@@ -43,9 +48,15 @@ function Banner() {
   };
 
   /** onClick function to connect to websocket server when user creates room */
-  /** @roomData grabs the roomName property  from roomData and sends with the emit, this will be used as roomName when creating the room*/
+  /** @roomData grabs the roomName property  from roomData state and sends with the emit, this will be used as roomName when creating the room*/
+  /** @userData user's data from dashboard layout context */
   const createRoom = () => {
-    ws.emit("create-room", roomData.roomName);
+    if (userData) {
+      ws.emit("create-room", roomData.roomName);
+    } else {
+      toast.error("User must be logged in");
+      return navigate("/login");
+    }
   };
 
   /** @Nav component css is found in BannerWrapper.js */
@@ -75,7 +86,6 @@ function Banner() {
           value={roomData.roomName}
           name='roomName'
         />
-        {/* {isEmpty && <IoClose className='icon' onClick={handleClick} />} */}
         <IoClose className='icon' onClick={handleClick} />
         <div className='button-container'>
           <Button onClick={createRoom}>Create call</Button>
