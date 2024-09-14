@@ -13,7 +13,7 @@ function ErrorPage() {
           className='sm:h-[40rem] w-auto h-[15rem]'
         />
       ) : (
-        <img src='.src/assets/error.png' className='w-fit' />
+        <img src='../src/assets/error.png' className='w-fit' />
       )}
       <Link to='/'>
         {" "}

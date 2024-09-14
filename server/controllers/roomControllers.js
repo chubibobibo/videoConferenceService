@@ -15,6 +15,7 @@ export const createRoom = async (req, res) => {
 
 /** get room name controller */
 export const getRoomName = async (req, res) => {
+  /** @id will be coming from the specific room created in the url of the room*/
   const { id } = req.params;
   if (!id) {
     throw new ExpressError("No id availbale", 400);
