@@ -31,6 +31,7 @@ export const roomHandler = (socket) => {
   /** @username username of logged user emitted from RoomPage */
   /** @foundRoom current room that is created where we are going to push participants using peerId */
   /** @updatedRoom searching for a specific room (room created or joined) to push peerId into participants */
+  /** @updatedParticipants async function that will search and update the current room joined by pushing the peerId received into the participants array. */
   socket.on("join-room", ({ roomId, peerId, username }) => {
     const updateParticipants = async () => {
       const foundRoom = await RoomModel.findOne({ roomId: roomId });
@@ -40,15 +41,28 @@ export const roomHandler = (socket) => {
           { $push: { participants: peerId && peerId } },
           { new: true }
         );
-        // console.log(updatedRoom);
         console.log({ peerId, username, roomId });
         if (peerId) {
           console.log(`User id: ${peerId} joined the room id: ${roomId}`);
         }
         socket.join(roomId);
+        /** sends "user-joined" emit to all participants in the room */
+        /** @peerId comes from the "join-room emit in RoomPage". This is needed for the "user-joined" listener in RoomContextProvider to call a specific user */
+        socket.to(roomId).emit("user-joined", { peerId });
         socket.emit("get-users", {
           roomId,
           participants: updatedRoom.participants,
+        });
+        /** @disconnect listens for a disconnect when ma user closes a tab. This executes a callback that searches and updates the specific Room by pulling the participant using it's peerId  */
+        socket.on("disconnect", async () => {
+          console.log("user left the room", peerId);
+          await RoomModel.findByIdAndUpdate(
+            { roomId: roomId },
+            { $pull: { participants: peerId } },
+            { safe: true },
+            { multi: false }
+          );
+          socket.to(roomId).emit("user-disconnected", peerId);
         });
       }
     };
