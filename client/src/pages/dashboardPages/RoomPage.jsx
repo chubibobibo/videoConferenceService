@@ -7,28 +7,40 @@ import axios from "axios";
 
 function RoomPage() {
   /** @id params from the emitted create-room in RoomcontextProvider*/
+  /** @me peerId object using the logged user id converted by PeerJs */
+  /** @userId state from RoomSocketContext that contains user data form calling loggedUser API */
   const { id } = useParams();
-  const { ws } = useContext(RoomSocketContext);
+  const { ws, me, userId } = useContext(RoomSocketContext);
+  console.log(me);
 
-  /** state to handle room name */
+  /** @roomName state to handle room name */
   const [roomName, setRoomName] = useState({});
 
   /** @getRoom function to call the api to  obtain the roomData using the id in the params */
   /** NOTE: don't forget to run the function at the end of the useEffect */
   /** @roomName an object returned from fetching the API that contains data about the room */
+  /** @username from userId object that is a context from RoomContextProvider that contains logged user's name and id */
+  /** @getRoom response from the getRoom API to display room details */
   useEffect(() => {
-    ws.emit("join-room", { roomId: id });
     const getRoom = async () => {
-      const roomName = await axios.get(`/api/rooms/getRoomName/${id}`);
-      console.log(roomName);
-      setRoomName(roomName);
+      const roomNameRes = await axios.get(`/api/rooms/getRoomName/${id}`);
+      setRoomName(roomNameRes);
     };
+
+    ws.emit("join-room", {
+      peerId: me?._id,
+      roomId: id,
+      username: userId?.username,
+    });
+
     getRoom();
-  }, [id]);
+  }, [me, ws]);
 
   return (
     <div>
       Room {id} - {roomName?.data?.foundRoomName?.roomName}
+      <p>{userId?.username}</p>
+      <p>peerId: {me?._id}</p>
     </div>
   );
 }

@@ -7,9 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  /** @client passed queryClient to the whole app component which allows the app to access the query cache */
-  <React.StrictMode>
+  <>
     <App />
     <ToastContainer position='top-center' />
-  </React.StrictMode>
+  </>
 );
