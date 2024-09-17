@@ -4,13 +4,15 @@ import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { RoomSocketContext } from "../../context/RoomContextProvider";
 import axios from "axios";
+import VideoPlayer from "../../components/VideoPlayer";
 
 function RoomPage() {
   /** @id params from the emitted create-room in RoomcontextProvider*/
   /** @me peerId object using the logged user id converted by PeerJs */
   /** @userId state from RoomSocketContext that contains user data form calling loggedUser API */
+  /** @peers object that contains peerId and stream data from RoomContextProvider */
   const { id } = useParams();
-  const { ws, me, userId } = useContext(RoomSocketContext);
+  const { ws, me, userId, stream, peers } = useContext(RoomSocketContext);
   console.log(me);
 
   /** @roomName state to handle room name */
@@ -41,6 +43,14 @@ function RoomPage() {
       Room {id} - {roomName?.data?.foundRoomName?.roomName}
       <p>{userId?.username}</p>
       <p>peerId: {me?._id}</p>
+      <VideoPlayer stream={stream} />
+      {Object.values(peers).map((newPeers) => {
+        return (
+          <div key={newPeers.id}>
+            <VideoPlayer stream={newPeers.stream} />
+          </div>
+        );
+      })}
     </div>
   );
 }
