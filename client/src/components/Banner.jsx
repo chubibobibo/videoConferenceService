@@ -49,7 +49,7 @@ function Banner() {
 
   /** onClick function to connect to websocket server when user creates room */
   /** @roomData grabs the roomName property  from roomData state and sends with the emit, this will be used as roomName when creating the room*/
-  /** @userData user's data from dashboard layout context */
+  /** @userData user's data from dashboard layout context using loader function*/
   const createRoom = () => {
     if (userData) {
       ws.emit("create-room", roomData.roomName);
