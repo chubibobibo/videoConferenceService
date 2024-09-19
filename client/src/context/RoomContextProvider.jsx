@@ -8,23 +8,24 @@ import { createContext, useEffect, useState, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
-import { Peer } from "peerjs";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "axios";
+
+import { Peer } from "peerjs";
 import { addPeerAction, removePeerAction } from "../utils/peerActions";
 import { peerReducer } from "../utils/peerReducer";
 
 /** @RoomSocketContext will be used to pass web socket connection to components that needs it. */
 export const RoomSocketContext = createContext();
 
+/** @WS stores the web socket url */
+/** @ws initialized web socket connection client side using the web socket url (server side) */
+/** This connection will be passed to components that needs it. */
+const WS = "http://localhost:3001";
+const ws = io(WS);
+
 function RoomContextProvider({ children }) {
   const navigate = useNavigate();
-
-  /** @WS stores the web socket url */
-  /** @ws initialized web socket connection client side using the web socket url (server side) */
-  /** This connection will be passed to components that needs it. */
-  const WS = "http://localhost:3001";
-  const ws = io(WS);
 
   /** @useReducer hook to update a complext set of state */
   /** @peers state that will update or change the state of peers this will passed as context to make it available to all components*/
@@ -38,17 +39,70 @@ function RoomContextProvider({ children }) {
   const [userId, setUserId] = useState({ username: "", userid: "" });
   const [stream, setStream] = useState();
 
+  /** @removePeer function that will be called to remove a peer from the state */
+  const removePeer = (peerId) => {
+    dispatch(removePeerAction(peerId));
+  };
+
   /** @enterRoom function that accepts roomId emitted from the server whenever a room is created. */
   /** This runs in in the listener for the create-room emit upon component mount (useEffect) */
   /** Then navigates to a RoomPage with a specific room id based on the roomId received. */
   /** @getUser async function to call the API for loggedUser.*/
   /** @newUserId id created using uuidv4 that will be used to generate a new peerID (PeerJs) */
   const enterRoom = ({ roomId }) => {
+    console.log("enter room runs");
+    navigate(`/room/${roomId}`);
+    // const getUser = async () => {
+    //   await axios
+    //     .get("/api/users/loggedUser")
+    //     .then((res) => {
+    //       // console.log(res);
+    //       const userDataName = res?.data?.user?.username;
+    //       const userDataId = res?.data?.user?._id;
+    //       const newUserId = uuidv4();
+    //       const peerId = new Peer(newUserId);
+    //       setMe(peerId);
+    //       setUserId((prev) => {
+    //         return { ...prev, username: userDataName, userid: userDataId };
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //       toast.error(err?.response?.data?.message);
+    //     });
+    // };
+
+    // /** @getMedia obtains the video stream of a user using GUM then store it in state. */
+    // const getMedia = async () => {
+    //   try {
+    //     navigator.mediaDevices
+    //       .getUserMedia({ video: true, audio: false })
+    //       .then((stream) => {
+    //         setStream(stream);
+    //       });
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
+
+    // getUser();
+    // getMedia();
+  };
+  const peerJoinRoom = async ({ foundRoom }) => {
+    console.log(foundRoom);
+    navigate(`/room/${foundRoom.roomId}`);
+  };
+
+  /** @useEffect runs on component mount and will listen to emit from server (room-created) then run the function enterRoom*/
+  /** @useEffect should run whenever there are changes in the connection(ws) this is to allow creation/joining room if users back out of the page. */
+  /** NOTE: backing out of RoomPage disconnects the connection */
+  /** @getUserMedia obtains the video and audio from devices in a variable (stream) and use it as value of the stream state */
+  /** @removePeer function that uses dispatch to remove a certain peer using a peerId from the state */
+  useEffect(() => {
     const getUser = async () => {
       await axios
         .get("/api/users/loggedUser")
         .then((res) => {
-          // console.log(res);
           const userDataName = res?.data?.user?.username;
           const userDataId = res?.data?.user?._id;
           const newUserId = uuidv4();
@@ -65,38 +119,24 @@ function RoomContextProvider({ children }) {
     };
 
     /** @getMedia obtains the video stream of a user using GUM then store it in state. */
-    const getMedia = async () => {
-      try {
-        navigator.mediaDevices
-          .getUserMedia({ video: true, audio: false })
-          .then((stream) => {
-            setStream(stream);
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const getMedia = async () => {
+    try {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then((stream) => {
+          setStream(stream);
+        });
+    } catch (err) {
+      console.log(err);
+    }
     getUser();
-    getMedia();
-    navigate(`/room/${roomId}`);
-  };
+    ws.on("room created", enterRoom);
 
-  /** @removePeer function that will be called to remove a peer from the state */
-  const removePeer = (peerId) => {
-    dispatch(removePeerAction(peerId));
-  };
-
-  /** @useEffect runs on component mount and will listen to emit from server (room-created) then run the function enterRoom*/
-  /** @useEffect should run whenever there are changes in the connection(ws) this is to allow creation/joining room if users back out of the page. */
-  /** NOTE: backing out of RoomPage disconnects the connection */
-  /** @getUserMedia obtains the video and audio from devices in a variable (stream) and use it as value of the stream state */
-  /** @removePeer function that uses dispatch to remove a certain peer using a peerId from the state */
-  useEffect(() => {
-    ws.on("room-created", enterRoom);
     ws.on("get-users", (participants) => {
       console.log(participants);
     });
-    ws.on("disconnect", removePeer);
+    ws.on("peer-joined-room", peerJoinRoom);
+    ws.on("user-disconnected", removePeer);
   }, []);
 
   /** Another useEffect to with a dependency of @stream from GUM */
@@ -108,6 +148,8 @@ function RoomContextProvider({ children }) {
     if (!stream) return;
     /** listener for "user-joined" emit coming from the roomHandler when a user joins */
     /** @userJoined emit will implement .call method in the current user @me that will call the new user @peerId and it's @stream */
+    /** @callOn handles incoming media stream from new user by listening to the @stream event which is triggered when a new user joins and transmits it's media. */
+    /** @dispatch stores the stream of the new joined user */
     ws.on("user-joined", ({ peerId }) => {
       const call = me.call(peerId, stream);
       call.on("stream", (stream) => {
@@ -116,6 +158,7 @@ function RoomContextProvider({ children }) {
     });
 
     /** @me listens to incoming call emits from other users, if call is received @me answers with stream */
+    /** @callOn receives the remote peer media stream after the call is received/answer then listens for the "stream" event, then executes the dispatch to store the new peers media stream */
     me.on("call", (call) => {
       call.answer(stream);
       call.on("stream", (stream) => {
@@ -127,7 +170,7 @@ function RoomContextProvider({ children }) {
   // console.log(me);
   /** @ws connection to the web socket server passed as context value */
   /** @me peerId object that contains the loggedUser passed as context value. */
-  console.log(me);
+  // console.log(me);
   return (
     <RoomSocketContext.Provider value={{ ws, me, userId, stream, peers }}>
       {children}

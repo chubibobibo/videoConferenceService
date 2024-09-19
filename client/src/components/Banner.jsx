@@ -1,6 +1,9 @@
 import { Wrapper } from "../assets/Wrappers/BannerWrapper";
 import { Button } from "@material-tailwind/react";
 
+// import { useEffect } from "react";
+// import { useLocation } from "react-router-dom";
+
 import { useContext, useState } from "react";
 
 import { DashboardLayoutContext } from "../pages/DashboardLayout";
@@ -15,7 +18,6 @@ import { toast } from "react-toastify";
 
 function Banner() {
   /** @useContext destructured the values passed in the DashboardLayout component */
-
   /** @userData context data containing userData from DashboardLayout */
   const { userData } = useContext(DashboardLayoutContext);
   /** @ws web socket connection passed from the RoomSocketContext created in the RoomContextProvider component. */
@@ -50,13 +52,17 @@ function Banner() {
   /** onClick function to connect to websocket server when user creates room */
   /** @roomData grabs the roomName property  from roomData state and sends with the emit, this will be used as roomName when creating the room*/
   /** @userData user's data from dashboard layout context using loader function*/
-  const createRoom = () => {
+  const createRoom = async () => {
     if (userData) {
       ws.emit("create-room", roomData.roomName);
     } else {
       toast.error("User must be logged in");
       return navigate("/login");
     }
+  };
+
+  const joinRoom = () => {
+    ws.emit("peer-join-room", roomData.roomName);
   };
 
   /** @Nav component css is found in BannerWrapper.js */
@@ -89,7 +95,7 @@ function Banner() {
         <IoClose className='icon' onClick={handleClick} />
         <div className='button-container'>
           <Button onClick={createRoom}>Create call</Button>
-          <Button>Join call</Button>
+          <Button onClick={joinRoom}>Join call</Button>
         </div>
       </div>
     </Wrapper>

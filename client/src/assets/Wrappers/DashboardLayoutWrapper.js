@@ -90,27 +90,15 @@ export const Wrapper = styled.div`
     }
   }
 
-  /** responsive screens */
-  /* @media only screen and (max-width: 1400px) {
-    width: 70%;
-  }
-  @media only screen and (max-width: 1080px) {
-    width: 65%;
-  }
-  @media only screen and (max-width: 800px) {
-    width: 75%;
-  }
-  @media only screen and (max-width: 640px) {
-    width: 85%;
-  } */
-  @media only screen and (max-width: 435px) {
+  @media only screen and (min-width: 320px) {
     .table-body {
-      width: 70%;
+      width: 80%;
     }
 
     .table-container {
-      width: 90%;
+      width: 70%;
       margin: 5px;
+      margin-top: 5%;
     }
     .upcoming-btn {
       width: 10%;
