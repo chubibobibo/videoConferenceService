@@ -57,9 +57,9 @@ export const Wrapper = styled.div`
     width: 100%;
     height: 25rem;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     margin-top: 1rem;
     margin-bottom: 1rem;
     gap: 0.5rem;

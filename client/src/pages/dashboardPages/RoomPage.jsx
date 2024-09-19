@@ -13,7 +13,7 @@ function RoomPage() {
   /** @peers object that contains peerId and stream data from RoomContextProvider */
   const { id } = useParams();
   const { ws, me, userId, stream, peers } = useContext(RoomSocketContext);
-  console.log(me);
+  // console.logs(me);
 
   /** @roomName state to handle room name */
   const [roomName, setRoomName] = useState({});
@@ -28,15 +28,15 @@ function RoomPage() {
       const roomNameRes = await axios.get(`/api/rooms/getRoomName/${id}`);
       setRoomName(roomNameRes);
     };
-
-    ws.emit("join-room", {
-      peerId: me?._id,
-      roomId: id,
-      username: userId?.username,
-    });
-
+    if (me) {
+      ws.emit("join-room", {
+        peerId: me?._id,
+        roomId: id,
+        username: userId?.username,
+      });
+    }
     getRoom();
-  }, [me, ws]);
+  }, [id, me, ws]);
 
   return (
     <div>
@@ -45,8 +45,9 @@ function RoomPage() {
       <p>peerId: {me?._id}</p>
       <VideoPlayer stream={stream} />
       {Object.values(peers).map((newPeers) => {
+        console.log(newPeers);
         return (
-          <div key={newPeers.id}>
+          <div key={newPeers.roomId}>
             <VideoPlayer stream={newPeers.stream} />
           </div>
         );
