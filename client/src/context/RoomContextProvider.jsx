@@ -39,11 +39,6 @@ function RoomContextProvider({ children }) {
   const [userId, setUserId] = useState({ username: "", userid: "" });
   const [stream, setStream] = useState();
 
-  /** @removePeer function that will be called to remove a peer from the state */
-  const removePeer = (peerId) => {
-    dispatch(removePeerAction(peerId));
-  };
-
   /** @enterRoom function that accepts roomId emitted from the server whenever a room is created. */
   /** This runs in in the listener for the create-room emit upon component mount (useEffect) */
   /** Then navigates to a RoomPage with a specific room id based on the roomId received. */
@@ -52,45 +47,16 @@ function RoomContextProvider({ children }) {
   const enterRoom = ({ roomId }) => {
     console.log("enter room runs");
     navigate(`/room/${roomId}`);
-    // const getUser = async () => {
-    //   await axios
-    //     .get("/api/users/loggedUser")
-    //     .then((res) => {
-    //       // console.log(res);
-    //       const userDataName = res?.data?.user?.username;
-    //       const userDataId = res?.data?.user?._id;
-    //       const newUserId = uuidv4();
-    //       const peerId = new Peer(newUserId);
-    //       setMe(peerId);
-    //       setUserId((prev) => {
-    //         return { ...prev, username: userDataName, userid: userDataId };
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //       toast.error(err?.response?.data?.message);
-    //     });
-    // };
-
-    // /** @getMedia obtains the video stream of a user using GUM then store it in state. */
-    // const getMedia = async () => {
-    //   try {
-    //     navigator.mediaDevices
-    //       .getUserMedia({ video: true, audio: false })
-    //       .then((stream) => {
-    //         setStream(stream);
-    //       });
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-
-    // getUser();
-    // getMedia();
   };
+
   const peerJoinRoom = async ({ foundRoom }) => {
     console.log(foundRoom);
     navigate(`/room/${foundRoom.roomId}`);
+  };
+
+  /** @removePeer function that will be called to remove a peer from the state */
+  const removePeer = (peerId) => {
+    dispatch(removePeerAction(peerId));
   };
 
   /** @useEffect runs on component mount and will listen to emit from server (room-created) then run the function enterRoom*/
@@ -150,21 +116,30 @@ function RoomContextProvider({ children }) {
     /** @userJoined emit will implement .call method in the current user @me that will call the new user @peerId and it's @stream */
     /** @callOn handles incoming media stream from new user by listening to the @stream event which is triggered when a new user joins and transmits it's media. */
     /** @dispatch stores the stream of the new joined user */
+    /** me.call calls the peerId and it's stream */
     ws.on("user-joined", ({ peerId }) => {
       const call = me.call(peerId, stream);
-      call.on("stream", (stream) => {
-        dispatch(addPeerAction(peerId, stream));
+      call.on("stream", (remoteStream) => {
+        dispatch(addPeerAction(peerId, remoteStream));
       });
     });
 
     /** @me listens to incoming call emits from other users, if call is received @me answers with stream */
     /** @callOn receives the remote peer media stream after the call is received/answer then listens for the "stream" event, then executes the dispatch to store the new peers media stream */
-    me.on("call", (call) => {
+    /** call.peer holds the unique id of the remote peer (other participant in the connection) */
+    // me.on("call", (call) => {
+    const handleCall = (call) => {
       call.answer(stream);
-      call.on("stream", (stream) => {
-        dispatch(addPeerAction(call.peer, stream));
+      call.on("stream", (remoteStream) => {
+        console.log(call.peer);
+        dispatch(addPeerAction(call.peer, remoteStream));
       });
-    });
+    };
+    me.on("call", handleCall);
+    // });
+    return () => {
+      me.off("call", handleCall);
+    };
   }, [me, stream]);
 
   // console.log(me);

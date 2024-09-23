@@ -32,7 +32,6 @@ export const loader = async () => {
 };
 
 function DashboardLayout() {
-  // const { ws } = useContext(RoomSocketContext);
   const navigate = useNavigate();
 
   /** user data from the loader function */

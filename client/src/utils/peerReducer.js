@@ -1,6 +1,5 @@
 /** action  that contains the case that we will be using*/
-import { ADD_PEER_STREAM } from "./peerActions.js";
-import { REMOVE_PEER_STREAM } from "./peerActions.js";
+import { ADD_PEER_STREAM, REMOVE_PEER_STREAM } from "./peerActions.js";
 
 /** @peerReducer function to update the state peers*/
 /** @action contains the logic to update the state when called. */
@@ -16,10 +15,10 @@ export const peerReducer = (state, action) => {
       };
     case REMOVE_PEER_STREAM:
       const { [action.payload.peerId]: deleted, ...rest } = state;
-      if (deleted?.stream) {
-        // Stop all the tracks in the stream to properly close it
-        deleted.stream.getTracks().forEach((track) => track.stop());
-      }
+      //   if (deleted?.stream) {
+      //     // Stop all the tracks in the stream to properly close it
+      //     deleted.stream.getTracks().forEach((track) => track.stop());
+      //   }
       return rest;
     default:
       return { ...state };
