@@ -20,38 +20,59 @@ export const roomHandler = (socket) => {
     } catch (err) {
       console.log(err);
     }
-    socket.emit("room-created", {
+    socket.emit("room created", {
       roomId: roomId,
       roomName: roomName,
     });
-    return;
   });
+
+  socket.on("peer-join-room", async (roomName) => {
+    const foundRoom = await RoomModel.findOne({ roomName: roomName });
+    socket.emit("peer-joined-room", { foundRoom });
+  });
+
   /** Listener for "join-room" */
   /** @peerId logged user id converted by peerjs emitted from RoomPage.jsx */
   /** @username username of logged user emitted from RoomPage */
   /** @foundRoom current room that is created where we are going to push participants using peerId */
   /** @updatedRoom searching for a specific room (room created or joined) to push peerId into participants */
-  socket.on("join-room", ({ roomId, peerId, username }) => {
-    const updateParticipants = async () => {
-      const foundRoom = await RoomModel.findOne({ roomId: roomId });
-      if (foundRoom && peerId !== null) {
-        const updatedRoom = await RoomModel.findOneAndUpdate(
-          { roomId: roomId },
-          { $push: { participants: peerId && peerId } },
-          { new: true }
-        );
-        // console.log(updatedRoom);
-        console.log({ peerId, username, roomId });
-        if (peerId) {
-          console.log(`User id: ${peerId} joined the room id: ${roomId}`);
-        }
-        socket.join(roomId);
-        socket.emit("get-users", {
-          roomId,
-          participants: updatedRoom.participants,
-        });
-      }
-    };
-    updateParticipants();
+  /** @updatedParticipants async function that will search and update the current room joined by pushing the peerId received into the participants array. */
+  socket.on("join-room", async ({ roomId, peerId, username }) => {
+    // const updateParticipants = async () => {
+    const foundRoom = await RoomModel.findOne({ roomId: roomId });
+    if (foundRoom) {
+      const updatedRoom = await RoomModel.findOneAndUpdate(
+        { roomId: roomId },
+        { $push: { participants: peerId } },
+        { new: true }
+      );
+      console.log({ peerId, username, roomId });
+      socket.join(roomId);
+
+      /** sends "user-joined" emit to all participants in the room */
+      /** @peerId comes from the "join-room emit in RoomPage". This is needed for the "user-joined" listener in RoomContextProvider to call a specific user */
+      socket.to(roomId).emit("user-joined", { peerId });
+      socket.emit("get-users", {
+        roomId,
+        participants: updatedRoom.participants,
+      });
+    }
+    // const leaveRoom = ({ peerId, roomId }) => {
+    //   socket.to(roomId).emit("user-disconnected", peerId);
+    //   console.log("user left the room", peerId);
+    // };
+
+    /** socket.on @disconnect listens for a disconnect when a user closes a tab. This executes a callback that searches and updates the specific Room by pulling the participant using it's peerId  */
+    /** @socketTo notifies other user in the room (roomId) then sends an emit of "user-disconnected to all users in the room notifying all the users that a user has disconnected." */
+    socket.on("disconnect", async () => {
+      console.log("Emitted user-disconnected for peer:", peerId);
+      await RoomModel.findOneAndUpdate(
+        { roomId: roomId },
+        { $pull: { participants: peerId } }
+        // { safe: true, multi: false }
+      );
+      socket.to(roomId).emit("user-disconnected", peerId);
+      console.log("user left the room", peerId);
+    });
   });
 };

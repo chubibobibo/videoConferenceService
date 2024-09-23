@@ -26,3 +26,14 @@ export const getRoomName = async (req, res) => {
   }
   res.status(200).json({ message: "room found", foundRoomName });
 };
+
+export const getAllRooms = async (req, res) => {
+  const allRooms = await RoomModel.find({});
+  if (!allRooms) {
+    throw new ExpressError("No rooms found", 400);
+  }
+  if (allRooms.length === 0) {
+    res.status(200).json({ message: "Previous rooms empty" });
+  }
+  res.status(200).json({ message: "Here are all the rooms", allRooms });
+};
