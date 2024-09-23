@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+// import { useLocation } from "react-router-dom";
 
 import { Wrapper } from "../assets/Wrappers/RoomMeetingsWrapper";
 
@@ -17,8 +19,8 @@ export const loader = async () => {
 };
 function RoomTable() {
   const foundRooms = useLoaderData();
-  console.log(foundRooms);
   const allRooms = foundRooms.data.allRooms;
+
   return (
     <Wrapper>
       {!allRooms ? (

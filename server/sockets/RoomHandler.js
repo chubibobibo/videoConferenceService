@@ -43,7 +43,7 @@ export const roomHandler = (socket) => {
     if (foundRoom) {
       const updatedRoom = await RoomModel.findOneAndUpdate(
         { roomId: roomId },
-        { $push: { participants: peerId && peerId } },
+        { $push: { participants: peerId } },
         { new: true }
       );
       console.log({ peerId, username, roomId });
@@ -57,21 +57,22 @@ export const roomHandler = (socket) => {
         participants: updatedRoom.participants,
       });
     }
+    // const leaveRoom = ({ peerId, roomId }) => {
+    //   socket.to(roomId).emit("user-disconnected", peerId);
+    //   console.log("user left the room", peerId);
+    // };
+
     /** socket.on @disconnect listens for a disconnect when a user closes a tab. This executes a callback that searches and updates the specific Room by pulling the participant using it's peerId  */
     /** @socketTo notifies other user in the room (roomId) then sends an emit of "user-disconnected to all users in the room notifying all the users that a user has disconnected." */
     socket.on("disconnect", async () => {
-      console.log("user left the room", peerId);
+      console.log("Emitted user-disconnected for peer:", peerId);
       await RoomModel.findOneAndUpdate(
         { roomId: roomId },
-        { $pull: { participants: peerId } },
-        { safe: true, multi: false }
+        { $pull: { participants: peerId } }
+        // { safe: true, multi: false }
       );
-      console.log("Emitted user-disconnected for peer:", peerId);
       socket.to(roomId).emit("user-disconnected", peerId);
-      // console.log("emit for disconnect");
+      console.log("user left the room", peerId);
     });
-
-    // };
-    // updateParticipants();
   });
 };
