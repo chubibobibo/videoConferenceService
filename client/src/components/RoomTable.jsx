@@ -1,8 +1,8 @@
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useLoaderData, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-// import { useLocation } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
+import day from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 
 import { Wrapper } from "../assets/Wrappers/RoomMeetingsWrapper";
 
@@ -18,8 +18,11 @@ export const loader = async () => {
   }
 };
 function RoomTable() {
+  /** @date modified date for readability */
   const foundRooms = useLoaderData();
   const allRooms = foundRooms.data.allRooms;
+  // console.log(...allRooms);
+  const createdDate = { ...allRooms };
 
   return (
     <Wrapper>
@@ -29,10 +32,12 @@ function RoomTable() {
         </div>
       ) : (
         allRooms.map((newRooms) => {
+          const createdDate = newRooms.createdAt;
+          const date = day(createdDate).format("MMM D, YYYY");
           return (
             <div key={newRooms._id} className='room-container'>
               <div>Room name: {newRooms.roomName}</div>
-              <div>Date created: {newRooms.roomName}</div>
+              <div>Date created: {date}</div>
             </div>
           );
         })

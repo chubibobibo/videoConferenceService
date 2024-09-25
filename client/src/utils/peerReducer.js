@@ -15,10 +15,10 @@ export const peerReducer = (state, action) => {
       };
     case REMOVE_PEER_STREAM:
       const { [action.payload.peerId]: deleted, ...rest } = state;
-      //   if (deleted?.stream) {
-      //     // Stop all the tracks in the stream to properly close it
-      //     deleted.stream.getTracks().forEach((track) => track.stop());
-      //   }
+      if (deleted?.stream) {
+        // Stop all the tracks in the stream to properly close it
+        deleted.stream.getTracks().forEach((track) => track.stop());
+      }
       return rest;
     default:
       return { ...state };
