@@ -12,4 +12,10 @@ export const Wrapper = styled.div`
     align-items: center;
     flex-direction: column;
   }
+
+  @media only screen and (max-width: 560px) {
+    .room-container {
+      align-items: start;
+    }
+  }
 `;

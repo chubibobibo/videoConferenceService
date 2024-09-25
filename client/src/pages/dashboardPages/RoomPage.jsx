@@ -30,7 +30,7 @@ function RoomPage() {
   /** @peers object that contains peerId and stream data from RoomContextProvider */
   const { id } = useParams();
   const { ws, me, userId, stream, peers } = useContext(RoomSocketContext);
-  console.log(me);
+  // console.log(me);
 
   /** @roomName state to handle room name */
   const [roomName, setRoomName] = useState({});
@@ -53,7 +53,7 @@ function RoomPage() {
       });
     }
     getRoom();
-  }, [id, me, ws]);
+  }, [id, me, ws, stream]);
 
   /** @stopeMEdiaStreams function to stop media stream */
   const stopMediaStreams = () => {
@@ -75,25 +75,25 @@ function RoomPage() {
         Room Name - {roomName?.data?.foundRoomName?.roomName}
       </h1>
       <div className='video-container1'>
-        <p>{userId?.username}</p>
-        <p>peerId: {me?._id}</p>
+        {/* <p>{userId?.username}</p> */}
+        {/* <p>peerId: {me?._id}</p> */}
         <VideoPlayer stream={stream} className='videoStream' />
       </div>
-      <div>
-        {Object.values(peers).map((newPeers) => {
-          console.log(newPeers);
-          return (
-            <div
-              key={newPeers.stream.id}
-              className={newPeers.stream && "video-container2"}
-            >
-              <p>{data?.data?.user?.username}</p>
-              <p>peerId: {newPeers.stream.id}</p>
-              <VideoPlayer stream={newPeers.stream} className='videoStream' />
-            </div>
-          );
-        })}
-      </div>
+      {/* <div> */}
+      {Object.values(peers).map((newPeers) => {
+        console.log(newPeers);
+        return (
+          <div
+            key={newPeers.stream.id}
+            className={newPeers.stream && "video-container2"}
+          >
+            {/* <p>{data?.data?.user?.username}</p> */}
+            {/* <p>peerId: {newPeers.stream.id}</p> */}
+            <VideoPlayer stream={newPeers.stream} className='videoStream' />
+          </div>
+        );
+      })}
+      {/* </div> */}
       <div className='controls-container'>
         <Button size='lg' color='red' onClick={handleClick}>
           End call

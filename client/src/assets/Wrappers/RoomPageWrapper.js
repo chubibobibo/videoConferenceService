@@ -23,8 +23,6 @@ export const Wrapper = styled.div`
     border: 1px solid lightgray;
     border-radius: 10px;
     margin-bottom: 1rem;
-    height: 90%;
-    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,16 +33,9 @@ export const Wrapper = styled.div`
     border: 1px solid lightgray;
     border-radius: 10px;
     margin-bottom: 1rem;
-    height: 90%;
-    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  .videoStream {
-    width: 20%;
-    /* height: 5rem; */
   }
 
   .controls-container {

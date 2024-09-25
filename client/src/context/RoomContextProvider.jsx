@@ -103,7 +103,16 @@ function RoomContextProvider({ children }) {
     });
     ws.on("peer-joined-room", peerJoinRoom);
     ws.on("user-disconnected", removePeer);
+
+    // return () => {
+    //   ws.off("room created");
+    //   ws.off("get-users");
+    //   ws.off("peer-joined-room");
+    //   ws.off("user-disconnected");
+    // };
   }, []);
+
+  console.log(stream);
 
   /** Another useEffect to with a dependency of @stream from GUM */
   /** Check for the current user (me) and it's stream */
@@ -128,17 +137,33 @@ function RoomContextProvider({ children }) {
     /** @callOn receives the remote peer media stream after the call is received/answer then listens for the "stream" event, then executes the dispatch to store the new peers media stream */
     /** call.peer holds the unique id of the remote peer (other participant in the connection) */
     // me.on("call", (call) => {
-    const handleCall = (call) => {
+
+    // const handleCall = (call) => {
+    //   call.answer(stream);
+    //   call.on("stream", (remoteStream) => {
+    //     console.log(call.peer);
+    //     if (!stream[call.peer]) {
+    //       dispatch(addPeerAction(call.peer, remoteStream));
+    //     }
+    //   });
+    // };
+
+    me.on("call", (call) => {
       call.answer(stream);
       call.on("stream", (remoteStream) => {
         console.log(call.peer);
-        dispatch(addPeerAction(call.peer, remoteStream));
+        // dispatch(addPeerAction(call.peer, remoteStream));
+        if (!stream[call.peer]) {
+          dispatch(addPeerAction(call.peer, remoteStream));
+        }
       });
-    };
-    me.on("call", handleCall);
-    // });
+    });
+    // me.on("call", handleCall);
+    // return () => {
+    //   me.off("call", handleCall);
+    // };
     return () => {
-      me.off("call", handleCall);
+      ws.off("user-joined");
     };
   }, [me, stream]);
 
