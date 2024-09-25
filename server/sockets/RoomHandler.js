@@ -68,8 +68,8 @@ export const roomHandler = (socket) => {
       console.log("Emitted user-disconnected for peer:", peerId);
       await RoomModel.findOneAndUpdate(
         { roomId: roomId },
-        { $pull: { participants: peerId } }
-        // { safe: true, multi: false }
+        { $pull: { participants: peerId } },
+        { safe: true, multi: false }
       );
       socket.to(roomId).emit("user-disconnected", peerId);
       console.log("user left the room", peerId);
