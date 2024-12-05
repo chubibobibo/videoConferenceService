@@ -176,14 +176,51 @@ export const Wrapper = styled.div`
       }
 
       .icon {
-        margin-left: 65%;
+        margin-left: 70%;
+        margin-top: 0%;
+        align-content: center;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 1400px) {
+    .roomInput-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      width: 90%;
+      margin: 0;
+
+      .form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        width: 90%;
+      }
+
+      .room-input {
+        border: 2px solid green;
+        border-radius: 10px;
+        width: 100%;
+      }
+
+      .icon {
+        margin-left: 63%;
         margin-top: 1%;
         align-content: center;
       }
     }
   }
 
-  @media only screen and (max-width: 435px) {
+  /* @media only screen and (max-width: 435px) {
+    p {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
     .nav {
       width: 100%;
       display: flex;
@@ -207,14 +244,13 @@ export const Wrapper = styled.div`
       }
     }
     .roomInput-container {
-      /* display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: column; */
       padding: 1rem;
       gap: 1rem;
       width: 90%;
-      /* background-color: red; */
+
+      .roomInput-container p {
+        font-size: 12px;
+      }
 
       .form {
         display: flex;
@@ -233,10 +269,30 @@ export const Wrapper = styled.div`
       }
 
       .icon {
-        margin-left: 50%;
+        margin-left: 65%;
         margin-top: 2%;
         align-content: center;
       }
     }
-  }
+  } */
+
+  /* @media only screen and (min-width: 1020px) {
+    .roomInput-container {
+      padding: 1rem;
+      gap: 1rem;
+      width: 90%;
+
+      .room-input {
+        border: 2px solid green;
+        border-radius: 10px;
+        max-width: 100%;
+      }
+
+      .icon {
+        margin-left: 65%;
+        margin-top: 1%;
+        align-content: center;
+      }
+    }
+  } */
 `;

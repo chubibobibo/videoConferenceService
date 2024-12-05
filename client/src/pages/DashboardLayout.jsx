@@ -9,6 +9,11 @@ import { Wrapper } from "../assets/Wrappers/DashboardLayoutWrapper";
 import { useNavigate, useLoaderData } from "react-router-dom";
 import axios from "axios";
 
+// import { useEffect } from "react";
+
+// import { useContext } from "react";
+// import { RoomSocketContext } from "../context/RoomContextProvider";
+
 /** @DashboardLayoutContext used to pass data to any component it is wrapped on */
 export const DashboardLayoutContext = createContext();
 
@@ -22,17 +27,19 @@ export const loader = async () => {
       return loggedUserData;
     }
   } catch (err) {
-    return null;
+    return err;
   }
 };
 
 function DashboardLayout() {
+  const navigate = useNavigate();
+
   /** user data from the loader function */
   const data = useLoaderData();
   // console.log(data);
 
   /**@navToRecent function to navigate upon clicking the buttons */
-  const navigate = useNavigate();
+
   const navToRecent = () => {
     navigate("/dashboard/roomTable");
   };

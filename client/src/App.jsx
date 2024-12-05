@@ -16,7 +16,8 @@ import RoomUpcomingMeeting from "./components/RoomUpcomingMeeting";
 import { action as loginAction } from "./pages/authPages/LoginPage";
 import { action as registerAction } from "./pages/authPages/RegisterPage";
 import { loader as loggedUserDataLoader } from "./pages/DashboardLayout";
-// import { loader as isLoggedLoader } from "./pages/dashboardPages/RoomPage";
+import { loader as getAllRoomsLoader } from "./components/RoomTable";
+import { loader as isLoggedLoader } from "./pages/dashboardPages/RoomPage";
 
 /** Context imports */
 import RoomContext from "./context/RoomContextProvider";
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
             <RoomPage />
           </RoomContext>
         ),
+        loader: isLoggedLoader,
       },
       /** Wraps RoomPage with the context to pass web socket connection */
       {
@@ -62,11 +64,20 @@ const router = createBrowserRouter([
         children: [
           {
             path: "roomTable",
-            element: <RoomTable />,
+            element: (
+              <RoomContext>
+                <RoomTable />
+              </RoomContext>
+            ),
+            loader: getAllRoomsLoader,
           },
           {
             path: "roomMeetings",
-            element: <RoomUpcomingMeeting />,
+            element: (
+              <RoomContext>
+                <RoomUpcomingMeeting />
+              </RoomContext>
+            ),
           },
         ],
       },
